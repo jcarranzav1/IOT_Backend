@@ -1,73 +1,67 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# My IoT Backend Project
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is an IoT backend project built with NestJS that provides a RESTful API for managing users and IoT devices (sensors). It demonstrates a well-structured architecture with separate layers for application logic, domain, and infrastructure.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- User authentication and authorization using JSON Web Tokens (JWT).
+- Role-based access control for different user types (admin, user).
+- Management of IoT devices (sensors) with CRUD operations.
+- Sensor access control using a custom interceptor.
+- Integration with AWS DynamoDB for data storage.
+- Integration with AWS IoT services for device management.
+- Real-time communication with sensors using MQTT protocol.
+- Scheduled storage of average sensor data every 5 minutes.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Getting Started
 
-## Installation
+### Prerequisites
 
-```bash
-$ yarn install
-```
+To run this project locally, you'll need to have the following installed:
 
-## Running the app
+- Node.js (version 12 or higher)
+- Yarn (optional, but recommended)
 
-```bash
-# development
-$ yarn run start
+### Installation
 
-# watch mode
-$ yarn run start:dev
+1. Clone the repository:
 
-# production mode
-$ yarn run start:prod
-```
+   ```sh
+   git clone https://github.com/yourusername/my-iot-backend.git
+   ```
 
-## Test
+2. Install the dependencies:
 
-```bash
-# unit tests
-$ yarn run test
+   ```sh
+   cd my-iot-backend
+   yarn install
 
-# e2e tests
-$ yarn run test:e2e
+   ```
 
-# test coverage
-$ yarn run test:cov
-```
+3. Set up environment variables:
 
-## Support
+   Copy the .env.example file to a new .env file and fill in the required environment variables for your AWS account, JWT secret, and other configurations.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+   ```sh
+   cp .env.example .env
+   ```
 
-## Stay in touch
+4. Run the project:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+   ```sh
+   yarn start
+   ```
+
+   The API will be available at http://localhost:3000.
+
+## Documentación de API
+
+You can access the API documentation at http://localhost:3000/api-docs. The documentation is generated using the NestJS Swagger module and provides an interactive interface for exploring the available API endpoints and testing the requests.
+
+## Deployment
+
+You can deploy this backend to any platform that supports Node.js applications, such as AWS Elastic Beanstalk, Heroku, or Vercel. Just make sure to set the appropriate environment variables and configure the necessary services (e.g., DynamoDB, AWS IoT, and MQTT broker) in your chosen platform
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+This project is licensed under the MIT License - see the LICENSE file for details.

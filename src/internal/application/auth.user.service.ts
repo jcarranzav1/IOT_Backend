@@ -7,13 +7,14 @@ import {
 import { JwtService } from '@nestjs/jwt'
 import { compare, hash } from 'bcrypt'
 import { LoginUserDto, SignUpUserDto } from 'src/internal/domain/dto/user.dto'
-import {
-  UserAccountResponse,
-  UserResponse,
-  omitPassword,
-} from 'src/internal/domain/dto/user.dto.response'
+
 import { User } from '../domain/entities/user.entity'
 import { IUserRepository } from '../domain/ports/user.port'
+import {
+  UserAccountResponse,
+  omitPassword,
+  UserResponse,
+} from '../domain/dto/response/user.dto.response'
 
 export interface IUserAuthService {
   signup: (createUser: SignUpUserDto) => Promise<UserAccountResponse>

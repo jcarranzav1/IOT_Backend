@@ -14,7 +14,7 @@ import {
   ThingResponse,
   omitSensibleInfo,
   ThingCredentialsResponse,
-} from '../domain/dto/thing.dto.response'
+} from '../domain/dto/response/thing.dto.response'
 import { IUserRepository } from '../domain/ports/user.port'
 
 const POLICY_NAME = 'IOTPolicy'

@@ -1,5 +1,6 @@
 import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator'
 import { SignUpUserDto } from '../dto/user.dto'
+import { ApiProperty } from '@nestjs/swagger'
 
 export enum UserRole {
   USER = 'user',
@@ -7,26 +8,32 @@ export enum UserRole {
 }
 
 export class User {
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   userID: string
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsEnum(UserRole)
   role: UserRole
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   name: string
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   lastname: string
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsEmail()
   email: string
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   cellphone: string
@@ -35,9 +42,11 @@ export class User {
   @IsString()
   password: string
 
+  @ApiProperty()
   @IsDateString()
   createdAt: Date
 
+  @ApiProperty()
   @IsDateString()
   updatedAt: Date
 

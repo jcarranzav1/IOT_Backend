@@ -3,13 +3,24 @@ import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino'
 import { AppModule } from './app.module'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const configService = app.get(ConfigService)
   const serverPort = configService.get<number>('port')
+  app.setGlobalPrefix('api')
 
-  app.setGlobalPrefix('/api')
+  const config = new DocumentBuilder()
+    .setTitle('My IoT Backend')
+    .setDescription('API Documentation for My IoT Backend')
+    .setVersion('1.0.0')
+    .addBearerAuth()
+    .build()
+
+  const document = SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('api-docs', app, document)
+
   app.useLogger(app.get(Logger))
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
   app.useGlobalInterceptors(new LoggerErrorInterceptor())

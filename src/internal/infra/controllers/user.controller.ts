@@ -11,14 +11,27 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common'
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger'
 import { IUserAuthService } from 'src/internal/application/auth.user.service'
 import {
   JwtAdminAuthGuard,
   JwtAnyRoleAuthGuard,
 } from 'src/internal/application/auth/guards/jwt-auth.guard'
 import { IUserService } from 'src/internal/application/user.service'
+import {
+  AllUsersResponseApi,
+  UserAccountResponseApi,
+  UserResponseApi,
+} from 'src/internal/domain/dto/response/user.dto.response'
 import { LoginUserDto, SignUpUserDto } from 'src/internal/domain/dto/user.dto'
 
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
   constructor(
@@ -26,6 +39,11 @@ export class UserController {
     @Inject('IUserService') private readonly userService: IUserService,
   ) {}
 
+  @ApiOperation({ summary: 'Sign up a new user' })
+  @ApiCreatedResponse({
+    description: 'User created successfully',
+    type: () => UserAccountResponseApi,
+  })
   @Post('auth/signup')
   async signup(
     @Res() res,
@@ -35,19 +53,25 @@ export class UserController {
   ): Promise<void> {
     try {
       const { user, token } = await this.authService.signup(createUserDto)
-      res.status(201).json({
+      const userResponse: UserAccountResponseApi = {
         data: user,
         meta: {
           statusCode: 201,
           token,
-          message: `Account created successfully`,
+          message: `User created successfully`,
         },
-      })
+      }
+      res.status(201).json(userResponse)
     } catch (err) {
       next(err)
     }
   }
 
+  @ApiOperation({ summary: 'Login a user' })
+  @ApiOkResponse({
+    description: 'User login successfully',
+    type: () => UserAccountResponseApi,
+  })
   @Post('auth/login')
   async login(
     @Res() res,
@@ -57,60 +81,82 @@ export class UserController {
   ): Promise<void> {
     try {
       const { user, token } = await this.authService.login(loginUserDto)
-      res.status(200).json({
+      const userResponse: UserAccountResponseApi = {
         data: user,
         meta: {
           statusCode: 200,
           token,
-          message: `Account login successfully`,
+          message: `User login successfully`,
         },
-      })
+      }
+      res.status(200).json(userResponse)
     } catch (err) {
       next(err)
     }
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get profile of the authenticated user' })
+  @ApiOkResponse({
+    description: 'Get your profile successfully',
+    type: () => UserResponseApi,
+  })
   @UseGuards(JwtAnyRoleAuthGuard)
   @Get('profile')
   async profile(@Res() res, @Request() req): Promise<void> {
-    res.status(200).json({
+    const userResponse: UserResponseApi = {
       data: req.user,
       meta: {
         statusCode: 200,
         message: 'Get your profile successfully',
       },
-    })
+    }
+    res.status(200).json(userResponse)
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get user by ID' })
+  @ApiOkResponse({
+    description: 'Get the user with the specified ID successfully',
+    type: () => UserResponseApi,
+  })
   @UseGuards(JwtAdminAuthGuard)
   @Get(':id')
   async findByID(@Res() res, @Next() next, @Param('id') id: string): Promise<void> {
     try {
       const user = await this.userService.findByID(id)
-      res.status(200).json({
+      const userResponse: UserResponseApi = {
         data: user,
         meta: {
           statusCode: 200,
-          message: `Get the user with id: ${id} successfully`,
+          message: 'Get the user with the specified ID successfully',
         },
-      })
+      }
+      res.status(200).json(userResponse)
     } catch (err) {
       next(err)
     }
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiOkResponse({
+    description: 'Get all users successfully',
+    type: () => AllUsersResponseApi,
+  })
   @UseGuards(JwtAdminAuthGuard)
   @Get()
   async findAllUsers(@Res() res, @Next() next): Promise<void> {
     try {
       const users = await this.userService.findAllUsers()
-      res.status(200).json({
+      const userResponse: AllUsersResponseApi = {
         data: users,
         meta: {
           statusCode: 200,
-          message: 'Get all profiles successfully',
+          message: 'Get all users successfully',
         },
-      })
+      }
+      res.status(200).json(userResponse)
     } catch (err) {
       next(err)
     }

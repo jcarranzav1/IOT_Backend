@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { IUserRepository } from '../domain/ports/user.port'
-import { UserResponse, omitPassword } from '../domain/dto/user.dto.response'
+import { UserResponse, omitPassword } from '../domain/dto/response/user.dto.response'
 
 export interface IUserService {
   findAllUsers: () => Promise<UserResponse[]>

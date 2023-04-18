@@ -21,13 +21,31 @@ import {
 import { IThingService } from 'src/internal/application/thing.service'
 import { CreateThingDTO } from 'src/internal/domain/dto/thing.dto'
 import { ThingAccessInterceptor } from '../../application/auth/interceptor/thing-access.interceptor'
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger'
+import {
+  AllThingsResponseApi,
+  ThingCeredentialsResponseApi,
+  ThingResponseApi,
+} from 'src/internal/domain/dto/response/thing.dto.response'
 
+@ApiTags('Things')
 @Controller('things')
 export class ThingController {
   constructor(
     @Inject('IThingService') private readonly thingService: IThingService,
   ) {}
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create a new thing' })
+  @ApiCreatedResponse({
+    description: 'Thing created successfully',
+    type: () => ThingResponseApi,
+  })
   @UseGuards(JwtAdminAuthGuard)
   @Post()
   async create(
@@ -38,18 +56,25 @@ export class ThingController {
   ): Promise<void> {
     try {
       const thing = await this.thingService.create(createThingDTO)
-      res.status(200).json({
+      const thingResponse: ThingResponseApi = {
         data: thing,
         meta: {
-          statusCode: 200,
+          statusCode: 201,
           message: `Thing created successfully`,
         },
-      })
+      }
+      res.status(201).json(thingResponse)
     } catch (err) {
       next(err)
     }
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all things of the user by userID' })
+  @ApiCreatedResponse({
+    description: 'Get the all things by user with that id successfully',
+    type: () => AllThingsResponseApi,
+  })
   @UseGuards(JwtAdminAuthGuard)
   @Get('user/:userID')
   async getAllThingsByUserID(
@@ -59,35 +84,49 @@ export class ThingController {
   ): Promise<void> {
     try {
       const thing = await this.thingService.findAllByUserID(userID)
-      res.status(200).json({
+      const thingsResponse: AllThingsResponseApi = {
         data: thing,
         meta: {
           statusCode: 200,
-          message: `Get the all things by user with id: ${userID} successfully`,
+          message: 'Get the all things by user with that id successfully',
         },
-      })
+      }
+      res.status(200).json(thingsResponse)
     } catch (err) {
       next(err)
     }
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get my all things' })
+  @ApiCreatedResponse({
+    description: 'Get the my all things successfully',
+    type: () => AllThingsResponseApi,
+  })
   @UseGuards(JwtUserAuthGuard)
-  @Get('mydevices')
+  @Get('mythings')
   async getMyAllDevices(@Req() req, @Res() res, @Next() next): Promise<void> {
     try {
       const thing = await this.thingService.findAllByUserID(req.user.userID)
-      res.status(200).json({
+      const thingsResponse: AllThingsResponseApi = {
         data: thing,
         meta: {
           statusCode: 200,
-          message: `Get the my all things successfully`,
+          message: 'Get the my all things successfully',
         },
-      })
+      }
+      res.status(200).json(thingsResponse)
     } catch (err) {
       next(err)
     }
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get the thing credentials by ID' })
+  @ApiCreatedResponse({
+    description: 'Get the thing credentials with that id successfully',
+    type: () => ThingCeredentialsResponseApi,
+  })
   @UseGuards(JwtAnyRoleAuthGuard)
   @UseInterceptors(ThingAccessInterceptor)
   @Get('credentials/:id')
@@ -98,31 +137,39 @@ export class ThingController {
   ): Promise<void> {
     try {
       const thing = await this.thingService.getCredentialsByID(id)
-      res.status(200).json({
+      const thingsResponse: ThingCeredentialsResponseApi = {
         data: thing,
         meta: {
           statusCode: 200,
-          message: `Get the thing credentials with id: ${id} successfully`,
+          message: 'Get the thing credentials with that id successfully',
         },
-      })
+      }
+      res.status(200).json(thingsResponse)
     } catch (err) {
       next(err)
     }
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get the thing by ID' })
+  @ApiCreatedResponse({
+    description: 'Get the thing with that id successfully',
+    type: () => ThingResponseApi,
+  })
   @UseGuards(JwtAnyRoleAuthGuard)
   @UseInterceptors(ThingAccessInterceptor)
   @Get(':id')
   async getByID(@Res() res, @Next() next, @Param('id') id: string): Promise<void> {
     try {
       const thing = await this.thingService.findByID(id)
-      res.status(200).json({
+      const thingResponse: ThingResponseApi = {
         data: thing,
         meta: {
           statusCode: 200,
-          message: `Get the thing with id: ${id} successfully`,
+          message: 'Get the thing with that id successfully',
         },
-      })
+      }
+      res.status(200).json(thingResponse)
     } catch (err) {
       next(err)
     }

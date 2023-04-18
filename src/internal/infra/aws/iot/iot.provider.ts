@@ -12,8 +12,8 @@ import {
 } from '@aws-sdk/client-iot'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { ThingCredential } from 'src/internal/domain/dto/response/thing.dto.response'
 import { CreateThingDTO } from 'src/internal/domain/dto/thing.dto'
-import { ThingCredential } from 'src/internal/domain/dto/thing.dto.response'
 
 @Injectable()
 export class IoTThingProvider {
