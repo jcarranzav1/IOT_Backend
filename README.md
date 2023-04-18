@@ -27,7 +27,7 @@ To run this project locally, you'll need to have the following installed:
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/yourusername/my-iot-backend.git
+   git clone https://github.com/jcarranzav1/my-iot-backend.git
    ```
 
 2. Install the dependencies:
